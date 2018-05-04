@@ -198,13 +198,13 @@ Run the database image to confirm connectivity. It takes some time to discover a
   * `-v <host/path>:<container/path>:Z` to bindmount the directory for persistent storage. The :Z option will label the content inside the container with the exact SELinux MCS label that the container runs. Below we'll inspect the labels on the directories before and after we run the container to see the changes on the labels in the directories
   * `-p <host_port>:<container_port>` to map the container port to the host port
 ```bash
-$ ls -lZd /var/lib/mariadb
-$ docker run -d -v /var/lib/mariadb:/var/lib/mysql:Z -p 3306:3306 -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb --name mariadb mariadb
+$ ls -lZd ~/workspace/pv/uploads
+$ docker run -d -p 8080:8080 -v ~/workspace/pv/uploads:/var/www/html/wp-content/uploads:z -e DB_ENV_DBUSER=user -e DB_ENV_DBPASS=mypassword -e
 ```
 
 Note: See the difference in SELinux context after running w/ a volume & :Z.
 ```bash
-$ ls -lZd /var/lib/mariadb
+$ ls -lZd ~/workspace/pv/uploads
 $ docker exec $(docker ps -ql) ps aux
 ```
 
