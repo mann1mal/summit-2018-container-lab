@@ -192,43 +192,20 @@ Now we are ready to build the images to test our Dockerfiles.
         $ sudo chown -R 27 ~/workspace/pv/mysql
         $ sudo chown -R 48 ~/workspace/pv/uploads
 
-Run the database image to confirm connectivity. It takes some time to discover all of the necessary `docker run` options.
+1. Run the wordpress image first. It takes some time to discover all of the necessary `docker run` options.
 
   * `-d` to run in daemonized mode
-  * `-v <host/path>:<container/path>:Z` to bindmount the directory for persistent storage. The :Z option will label the content inside the container with the exact SELinux MCS label that the container runs. Below we'll inspect the labels on the directories before and after we run the container to see the changes on the labels in the directories
+  * `-v <host/path>:<container/path>:z` to mount (technically, "bindmount") the directory for persistent storage. The :z option will label the content inside the container with the SELinux MCS label that the container uses so that the container can write to the directory. Below we'll inspect the labels on the directories before and after we run the container to see the changes on the labels in the directories
   * `-p <host_port>:<container_port>` to map the container port to the host port
+
 ```bash
 $ ls -lZd ~/workspace/pv/uploads
-$ docker run -d -p 8080:8080 -v ~/workspace/pv/uploads:/var/www/html/wp-content/uploads:z -e DB_ENV_DBUSER=user -e DB_ENV_DBPASS=mypassword -e
+$ docker run -d -p 8080:8080 -v ~/workspace/pv/uploads:/var/www/html/wp-content/uploads:z -e DB_ENV_DBUSER=user -e DB_ENV_DBPASS=mypassword -e DB_ENV_DBNAME=mydb -e DB_HOST=0.0.0.0 -e DB_PORT=3306 --name wordpress wordpress
 ```
 
 Note: See the difference in SELinux context after running w/ a volume & :Z.
 ```bash
 $ ls -lZd ~/workspace/pv/uploads
-$ docker exec $(docker ps -ql) ps aux
-```
-
-Check volume directory ownership inside the container
-```bash
-$ docker exec $(docker ps -ql) stat --format="%U" /var/lib/mysql
-$ docker logs $(docker ps -ql)
-$ docker ps
-$ curl localhost:3306
-```
-
-  **Note**: the `curl` command does not return useful information but demonstrates
-            a response on the port.
-
-5. Test the Wordpress image to confirm connectivity. Additional run options:
-  * `--link <name>:<alias>` to link to the database container
-```bash
-$ ls -lZd /var/lib/wp_uploads
-$ docker run -d -v /var/lib/wp_uploads:/var/www/html/wp-content/uploads:Z -p 8080:8080 --link mariadb:db --name wordpress wordpress
-```
-
-Note: See the difference in SELinux context after running w/ a volume & :Z.
-```bash
-$ ls -lZd /var/lib/wp_uploads
 $ docker exec $(docker ps -ql) ps aux
 ```
 
@@ -238,7 +215,39 @@ $ docker exec $(docker ps -ql) stat --format="%U" /var/www/html/wp-content/uploa
 $ docker logs $(docker ps -ql)
 $ docker ps
 $ curl -L http://localhost:8080
+```
 
+  **Note**: the `curl` command does not return useful information but demonstrates
+            a response on the port.
+
+5. Bring up the database (mariadb) for the wordpress instance. For the mariadb container we need to specify an additional option to make sure it is in the same "network" as the apache/wordpress container and not visible outside that container:
+
+  * `--network=container:<alias>` to link to the wordpress container
+```bash
+$ ls -lZd ~/workspace/pv/mysql
+$ dockerrun -d --network=container:wordpress -v ~/workspace/pv/mysql:/var/lib/mysql:z -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb --name mariadb mariadb
+```
+
+Note: See the difference in SELinux context after running w/ a volume & :z.
+```bash
+$ ls -lZd ~/workspace/pv/mysql
+$ ls -lZ ~/workspace/pv/mysql
+$ docker exec $(docker ps -ql) ps aux
+```
+Check volume directory ownership inside the container
+```bash
+$ docker exec $(docker ps -ql) stat --format="%U" /var/lib/mysql
+```
+
+Now we can check out how the database is doing
+```bash
+$ docker logs $(docker ps -ql)
+$ docker ps
+$ curl localhost:3306 #as you can see the db is not generally visible
+$ curl -L http://localhost:8080 #and now wp is happier!
+```
+
+You may also load the Wordpress application in a browser to test its full functionality @ `http://<YOUR AWS VM PUBLIC DNS NAME HERE>:8080`.
 
 ## Deploy a Container Registry
 
