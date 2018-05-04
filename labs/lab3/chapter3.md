@@ -242,26 +242,6 @@ $ curl -L http://localhost:8080
 
 You may also load the Wordpress application in a browser to test its full functionality @ `http://<YOUR AWS VM PUBLIC DNS NAME HERE>:8080`.
 
-### Simplify running containers with the atomic CLI
-
-When we have a working `docker run` recipe we want a way to communicate that to the end-user. The `atomic` tool is installed on both RHEL and Atomic hosts. It is useful in controlling the Atomic host as well as running containers. It is able to parse the `LABEL` instruction in a `Dockerfile`. The `LABEL run` instruction prescribes how the image is to be run. In addition to providing informative human-readable metadata, `LABEL`s may be used by the `atomic` CLI to run an image the way a developer designed it to run. This avoids having to copy+paste from README files. For more information on the `atomic` command, please see the [documentation here](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux_atomic_host/7/html/cli_reference/atomic_commands).
-
-1. Edit `wordpress/Dockerfile` and add the following instruction near the bottom of the file above the CMD line.
-
-        LABEL run docker run -d -v /var/lib/wp_uploads:/var/www/html/wp-content/uploads:Z -p 8080:8080 --link=mariadb:db --name NAME -e NAME=NAME -e IMAGE=IMAGE IMAGE
-
-1. Rebuild the Wordpress image. The image cache will be used so only the changes will need to be built.
-
-        $ docker build -t wordpress wordpress/
-
-1. Re-run the Wordpress image using the `atomic` CLI. We don't need to use a complicated, error-prone `docker run` string. Test using the methods from the earlier step. In addition, we are going to launch the image using the `atomic` command. Before we can do that, we'll install it as noted below.
-
-        $ docker stop wordpress
-        $ docker rm wordpress
-        $ sudo yum -y install atomic
-        $ atomic run wordpress
-        $ curl -L http://localhost:8080
-
 ### Push images to local registry
 
 1. Once satisfied with the images tag them with the URI of the local lab local registry. The tag is what OpenShift uses to identify the particular image that we want to import from the registry.
