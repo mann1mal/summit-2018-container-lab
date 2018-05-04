@@ -7,18 +7,18 @@ Expected completion: 5-10 minutes
 ## Find your AWS Instance
 This lab is designed to accommodate many students. As a result, each student will be given a VM running on AWS. The naming convention for the lab VMs is:
 
-**student-\<number\>**.labs.sysdeseng.com
+**student-\<number\>**.openshift.awsworkshop.io
 
 You will be assigned a number by the instructor.
 
-Retrieve the key from the [instructor host](https://instructor.labs.sysdeseng.com/rhte.pem) so that you can _SSH_ into the instances by accessing the password protected directory from the table above. Download the _L1108.pem_ file to your local machine and change the permissions of the file to 600.
+Retrieve the key from the [instructor host](http://s3-us-west-2.amazonaws.com/redhat-lunch-learn-lab/index.html) so that you can _SSH_ into the instances by accessing the password protected directory from the table above. Download the .PEM or .PPK file to your local machine and change the permissions of the file to 600.
 
 ## Connecting to your AWS Instance
 This lab should be performed on **YOUR ASSIGNED AWS INSTANCE** as `ec2-user` unless otherwise instructed.
 
 **_NOTE_**: Please be respectful and only connect to your assigned instance. Every instance for this lab uses the same public key so you could accidentally (or with malicious intent) connect to the wrong system. If you have any issues please inform an instructor.
 ```bash
-$ ssh -i L1108.pem ec2-user@student-<number>.labs.sysdeseng.com
+$ ssh -i ocp-workshop.pem ec2-user@student-<number>.openshift.awsworkshop.io
 ```
 
 **NOTE**: For Windows users you will have to use a terminal like [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html) to SSH using the private key. 
@@ -87,7 +87,7 @@ We can also check out the OpenShift console. Open a browser and navigate to `htt
 Clone the lab repository from github:
 ```bash
 $ cd ~/
-$ git clone https://github.com/dustymabe/summit-2018-container-lab
+$ git clone https://github.com/mann1mal/summit-2018-container-lab
 ```
 
 ## OpenShift Container Platform
