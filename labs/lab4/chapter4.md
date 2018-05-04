@@ -11,23 +11,22 @@ Let's start with a little experimentation. I am sure you are all excited about y
 So, let's see what will happen. Launch the site:
 
 ```bash
-$ sudo podman run -d -p 8080:8080 -v ~/workspace/pv/uploads:/var/www/html/wp-content/uploads:z -e DB_ENV_DBUSER=user -e DB_ENV_DBPASS=mypassword -e DB_ENV_DBNAME=mydb -e DB_HOST=0.0.0.0 -e DB_PORT=3306 --name wordpress wordpress
-$ sudo podman run -d --network=container:wordpress -v ~/workspace/pv/mysql:/var/lib/mysql:z -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb --name mariadb mariadb
+$ docker run -d -p 3306:3306 -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb --name mariadb mariadb
+$ docker run -d -p 8080:8080 --link mariadb:db --name wordpress wordpress
 ```
 
 Take a look at the site in your web browser on your machine using 
 `http://<YOUR AWS VM PUBLIC DNS NAME HERE>:8080`. As you learned before, you can confirm the port that your server is running on by executing:
 ```bash
-$ sudo podman ps
-$ sudo podman port wordpress
-8080/udp -> 0.0.0.0:8080
+$ docker ps
+$ docker port wordpress
 8080/tcp -> 0.0.0.0:8080
 ```
 
 Now, let's see what happens when we kick over the database. However, for a later experiment, let's grab the container-id right before you do it. 
 ```bash
-$ OLD_CONTAINER_ID=$(sudo podman inspect --format '{{ .ID }}' mariadb)
-$ sudo podman stop mariadb
+$ OLD_CONTAINER_ID=$(docker inspect --format '{{ .Id }}' mariadb)
+$ docker stop mariadb
 ```
 
 Take a look at the site in your web browser or using curl now. And, imagine explosions! (*making sound effects will be much appreciated by your lab mates.*)
@@ -40,16 +39,16 @@ $ curl -L http://localhost:8080
 
 Now, what is neat about a container system, assuming your web application can handle it, is we can bring it right back up, with no loss of data.
 ```bash
-$ sudo podman start mariadb
+$ docker start mariadb
 ```
 
 OK, now, let's compare the old container id and the new one.
 ```bash
-$ NEW_CONTAINER_ID=$(sudo podman inspect --format '{{ .ID }}' mariadb)
+$ NEW_CONTAINER_ID=$(docker inspect --format '{{ .Id }}' mariadb)
 $ echo -e "$OLD_CONTAINER_ID\n$NEW_CONTAINER_ID"
 ```
 
-Hmmm. Well, that is cool, they are exactly the same. OK, so all in all, about what you would expect for a web server and a database running on VMs, but a whole lot faster (well, the starting is). Let's take a look at the site now.
+Hmmm. Well, that is cool, they are exactly the same. OK, so all in all, about what you would expect for a web server and a database running on VMs, but a whole lot faster. Let's take a look at the site now.
 
 * web browser -> `http://<YOUR AWS VM PUBLIC DNS NAME HERE>:8080`
 OR
@@ -61,7 +60,7 @@ And.. Your site is back! Fortunately wordpress seems to be designed such that it
 
 Finally, let's kill off these containers to prepare for the next section.
 ```bash
-$ sudo podman rm -f mariadb wordpress
+$ docker rm -f wordpress mariadb
 ```
 
 Starting and stopping is definitely easy, and fast. However, it is still pretty manual. What if we could automate the recovery? Or, in buzzword terms, "ensure the service remains available"? Enter Kubernetes/OpenShift.
