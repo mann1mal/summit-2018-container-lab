@@ -167,29 +167,4 @@ Before we move on to the next section let's clean up the apache container so we 
 $ docker rm -f apache
 ```
 
-## Deploy a Container Registry
-
-To prepare for a later lab, let's deploy a simple registry to store our images.
-
-Navigate to the Lab1 directory
-```bash
-$ cd ~/aws-loft-2017-container-lab/labs/lab1
-```
-
-Inspect the Dockerfile that has been prepared.
-```bash
-$ cat registry/Dockerfile
-```
-
-Build & run the registry
-```bash
-$ docker build -t registry registry/
-$ docker run --restart="always" --name registry -p 5000:5000 -d registry
-```
-
-Confirm the registry is running.
-```bash
-$ docker ps
-```
-
 In the [next lab](../lab2/chapter2.md) we will be analyzing a monolithic application.
