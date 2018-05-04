@@ -188,10 +188,11 @@ Now we are ready to build the images to test our Dockerfiles.
 
 1. Create the local directories for persistent storage & set permissions for container runtime.
 
-        $ sudo mkdir -p /var/lib/mariadb /var/lib/wp_uploads
-        $ sudo chown 27 /var/lib/mariadb /var/lib/wp_uploads
+        $ mkdir -p ~/workspace/pv/mysql ~/workspace/pv/uploads
+        $ sudo chown -R 27 ~/workspace/pv/mysql
+        $ sudo chown -R 48 ~/workspace/pv/uploads
 
-1. Run the database image to confirm connectivity. It takes some time to discover all of the necessary `docker run` options.
+Run the database image to confirm connectivity. It takes some time to discover all of the necessary `docker run` options.
 
   * `-d` to run in daemonized mode
   * `-v <host/path>:<container/path>:Z` to bindmount the directory for persistent storage. The :Z option will label the content inside the container with the exact SELinux MCS label that the container runs. Below we'll inspect the labels on the directories before and after we run the container to see the changes on the labels in the directories
@@ -237,9 +238,32 @@ $ docker exec $(docker ps -ql) stat --format="%U" /var/www/html/wp-content/uploa
 $ docker logs $(docker ps -ql)
 $ docker ps
 $ curl -L http://localhost:8080
+
+
+## Deploy a Container Registry
+
+To prepare for a later lab, let's deploy a simple registry to store our images.
+
+Navigate to the Lab1 directory
+```bash
+$ cd ~/aws-loft-2017-container-lab/labs/lab1
 ```
 
-You may also load the Wordpress application in a browser to test its full functionality @ `http://<YOUR AWS VM PUBLIC DNS NAME HERE>:8080`.
+Inspect the Dockerfile that has been prepared.
+```bash
+$ cat registry/Dockerfile
+```
+
+Build & run the registry
+```bash
+$ docker build -t registry registry/
+$ docker run --restart="always" --name registry -p 5000:5000 -d registry
+```
+
+Confirm the registry is running.
+```bash
+$ docker ps
+```
 
 ### Push images to local registry
 
@@ -277,29 +301,5 @@ $ docker rm $(docker ps -qa)
 
 This command will result in a cosmetic error because it is trying to stop running containers like the registry and the OpenShift containers that are running. These errors can safely be ignored.
 
-## Deploy a Container Registry
-
-To prepare for a later lab, let's deploy a simple registry to store our images.
-
-Navigate to the Lab1 directory
-```bash
-$ cd ~/aws-loft-2017-container-lab/labs/lab1
-```
-
-Inspect the Dockerfile that has been prepared.
-```bash
-$ cat registry/Dockerfile
-```
-
-Build & run the registry
-```bash
-$ docker build -t registry registry/
-$ docker run --restart="always" --name registry -p 5000:5000 -d registry
-```
-
-Confirm the registry is running.
-```bash
-$ docker ps
-```
 
 In the [next lab](../lab4/chapter4.md) we introduce container orchestration via OpenShift.
