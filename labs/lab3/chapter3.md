@@ -68,12 +68,12 @@ $ docker rm $(docker ps -ql)
 
 ## Create the Dockerfiles
 
-Now we will develop the two images. Using the information above and the Dockerfile from Lab 2 as a guide we will create Dockerfiles for each service. For this lab we have created a directory for each service with the required files for the service. Please explore these directories and check out the contents and checkout the startup scripts.
+Now we will develop the two images. Using the information above and the Dockerfile from Lab 2 as a guide, we will create Dockerfiles for each service. For this lab we have created a directory for each service with the required files for the service. Please explore these directories and check out the contents and the startup scripts.
 ```bash
 $ mkdir ~/workspace
 $ cd ~/workspace
-$ cp -R ~/aws-loft-2017-container-lab/labs/lab3/mariadb .
-$ cp -R ~/aws-loft-2017-container-lab/labs/lab3/wordpress .
+$ cp -R ~/summit-2018-container-lab/labs/lab3/mariadb .
+$ cp -R ~/summit-2018-container-lab/labs/lab3/wordpress .
 $ ls -lR mariadb
 $ ls -lR wordpress
 ```
@@ -86,7 +86,7 @@ $ ls -lR wordpress
 
 1. Add a `FROM` line that uses a specific image tag. Also add `MAINTAINER` information.
 
-        FROM registry.access.redhat.com/rhel7:7.3-97
+        FROM registry.access.redhat.com/rhel7:7.5-231
         MAINTAINER Student <student@example.com>
 
 1. Add the required packages. We'll include `yum clean all` at the end to clear the yum cache.
@@ -107,13 +107,13 @@ $ ls -lR wordpress
 
         EXPOSE 3306
 
-1. Add a `VOLUME` instruction. This ensures data will be persisted even if the container is lost.
+1. Add a `VOLUME` instruction. This ensures data will be persisted even if the container is lost. However, it won't do anything unless, when running the container, host directories are mapped to the volumes.
 
-        VOLUME /var/lib/mysql /var/log/mariadb /run/mariadb
+        VOLUME /var/lib/mysql
 
-1. Switch to a non-root `USER`.
+1. Switch to a non-root `USER` uid. The default uid of the mysql user is 27.
 
-        USER mysql
+        USER 27
 
 1. Finish by adding the `CMD` instruction.
 
@@ -131,7 +131,7 @@ Now we'll create the Wordpress Dockerfile. (As before, there is a reference file
 
 1. Add a `FROM` line that uses a specific image tag. Also add `MAINTAINER` information.
 
-        FROM registry.access.redhat.com/rhel7:7.3-97
+        FROM registry.access.redhat.com/rhel7:7.5-231
         MAINTAINER Student <student@example.com>
 
 1. Add the required packages. We'll include `yum clean all` at the end to clear the yum cache.
@@ -145,12 +145,11 @@ Now we'll create the Wordpress Dockerfile. (As before, there is a reference file
         ADD scripts /scripts
         RUN chmod 755 /scripts/*
 
-1. Add the Wordpress source from gzip tar file. docker will extract the files. Also, modify permissions to support non-root container runtime. Switch to port 8080 for non-root apache runtime.
+1. Add the Wordpress source from gzip tar file. podman will extract the files. Also, modify permissions to support non-root container runtime. Switch to port 8080 for non-root apache runtime.
 
         COPY latest.tar.gz /latest.tar.gz
         RUN tar xvzf /latest.tar.gz -C /var/www/html --strip-components=1 && \
             rm /latest.tar.gz && \
-            usermod -u 27 apache && \
             sed -i 's/^Listen 80/Listen 8080/g' /etc/httpd/conf/httpd.conf && \
             APACHE_DIRS="/var/www/html /usr/share/httpd /var/log/httpd /run/httpd" && \
             chown -R apache:0 ${APACHE_DIRS} && \
@@ -162,11 +161,11 @@ Now we'll create the Wordpress Dockerfile. (As before, there is a reference file
 
 1. Add a `VOLUME` instruction. This ensures data will be persisted even if the container is lost.
 
-        VOLUME /var/www/html/wp-content/uploads /var/log/httpd /run/httpd
+        VOLUME /var/www/html/wp-content/uploads
 
-1. Switch to a non-root `USER`.
+1. Switch to a non-root `USER` uid. The default uid of the apache user is 48.
 
-        USER apache
+        USER 48
 
 1. Finish by adding the `CMD` instruction.
 
