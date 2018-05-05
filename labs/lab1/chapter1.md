@@ -74,7 +74,7 @@ Change to `~/aws-loft-2017-container-lab/labs/lab1` and `cat` out the Dockerfile
 $ cd ~/aws-loft-2017-container-lab/labs/lab1
 $ cat Dockerfile
 ```
-```dockerfile
+```
 FROM registry.access.redhat.com/rhel7
 MAINTAINER Student <student@example.com>
 
