@@ -1,0 +1,25 @@
+config:
+  renderer: markdown
+  vars:
+    - name: MASTER
+      desc: Master Nodes
+      value: "http://sds"
+    - name: PARTNER_NAME
+      desc: Workshop Partner
+      value: "Default"
+
+modules:
+  labs_lab0_chapter0:
+    name: Getting Started
+  labs_lab1_chapter1:
+    name: Meet Docker
+  labs_lab2_chapter2:
+    name: Look, a Monolith
+  labs_lab3_chapter3:
+    name: Breaking it down
+  labs_lab4_chapter4:
+    name: Deploying it
+  labs_lab5_chapter5:
+    name: Deploying it easy
+  labs_lab6_chapter6:
+    name: Consuming other things
