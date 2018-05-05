@@ -21,7 +21,7 @@ This lab should be performed on **YOUR ASSIGNED AWS INSTANCE** as `ec2-user` unl
 $ ssh -i ocp-workshop.pem ec2-user@student-<number>.openshift.awsworkshop.io
 ```
 
-**NOTE**: For Windows users you will have to use a terminal like [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html) to SSH using the private key. 
+**NOTE**: For Windows users you will have to use a terminal like [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html) to SSH using the private key.
 
 Once installed, use the following instructions to SSH to your VM instance: [http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html).
 
@@ -85,6 +85,7 @@ We can also check out the OpenShift console. Open a browser and navigate to `htt
 ## Lab Materials
 
 Clone the lab repository from github:
+
 ```bash
 $ cd ~/
 $ git clone https://github.com/mann1mal/summit-2018-container-lab
