@@ -225,7 +225,7 @@ $ curl -L http://localhost:8080
   * `--network=container:<alias>` to link to the wordpress container
 ```bash
 $ ls -lZd ~/workspace/pv/mysql
-$ dockerrun -d --network=container:wordpress -v ~/workspace/pv/mysql:/var/lib/mysql:z -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb --name mariadb mariadb
+$ docker run -d --network=container:wordpress -v ~/workspace/pv/mysql:/var/lib/mysql:z -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb --name mariadb mariadb
 ```
 
 Note: See the difference in SELinux context after running w/ a volume & :z.
@@ -255,7 +255,7 @@ To prepare for a later lab, let's deploy a simple registry to store our images.
 
 Navigate to the Lab1 directory
 ```bash
-$ cd ~/aws-loft-2017-container-lab/labs/lab1
+$ cd ~/summit-2018-container-lab/labs/lab1
 ```
 
 Inspect the Dockerfile that has been prepared.
