@@ -253,9 +253,9 @@ You may also load the Wordpress application in a browser to test its full functi
 
 To prepare for a later lab, let's deploy a simple registry to store our images.
 
-Navigate to the Lab1 directory
+Navigate to the Lab3 directory
 ```bash
-$ cd ~/summit-2018-container-lab/labs/lab1
+$ cd ~/summit-2018-container-lab/labs/lab3
 ```
 
 Inspect the Dockerfile that has been prepared.
