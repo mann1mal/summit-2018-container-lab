@@ -86,38 +86,51 @@ $ ls -lR wordpress
 
 1. Add a `FROM` line that uses a specific image tag. Also add `MAINTAINER` information.
 
+```
         FROM registry.access.redhat.com/rhel7:7.5-231
         MAINTAINER Student <student@example.com>
+```
 
 1. Add the required packages. We'll include `yum clean all` at the end to clear the yum cache.
 
+```
         RUN yum -y install --disablerepo "*" --enablerepo rhel-7-server-rpms \
               mariadb-server openssl psmisc net-tools hostname && \
             yum clean all
-
+```
 1. Add the dependent scripts and modify permissions to support non-root container runtime.
 
+```
         ADD scripts /scripts
         RUN chmod 755 /scripts/* && \
             MARIADB_DIRS="/var/lib/mysql /var/log/mariadb /run/mariadb" && \
             chown -R mysql:0 ${MARIADB_DIRS} && \
             chmod -R g=u ${MARIADB_DIRS}
+```
 
 1. Add an instruction to expose the database port.
 
+```
         EXPOSE 3306
+```
 
 1. Add a `VOLUME` instruction. This ensures data will be persisted even if the container is lost. However, it won't do anything unless, when running the container, host directories are mapped to the volumes.
 
+```
         VOLUME /var/lib/mysql
+```
 
 1. Switch to a non-root `USER` uid. The default uid of the mysql user is 27.
 
+```
         USER 27
+```
 
 1. Finish by adding the `CMD` instruction.
 
+```
         CMD ["/bin/bash", "/scripts/start.sh"]
+```
 
 Save the file and exit the editor.
 
@@ -127,26 +140,35 @@ Now we'll create the Wordpress Dockerfile. (As before, there is a reference file
 
 1. Using a text editor create a file named `Dockerfile` in the `wordpress` directory.
 
+```
         $ vi wordpress/Dockerfile
+```
 
 1. Add a `FROM` line that uses a specific image tag. Also add `MAINTAINER` information.
 
+```
         FROM registry.access.redhat.com/rhel7:7.5-231
         MAINTAINER Student <student@example.com>
+```
 
 1. Add the required packages. We'll include `yum clean all` at the end to clear the yum cache.
 
+```
         RUN yum -y install --disablerepo "*" --enablerepo rhel-7-server-rpms \
               httpd php php-mysql php-gd openssl psmisc && \
             yum clean all
+```
 
 1. Add the dependent scripts and make them executable.
 
+```
         ADD scripts /scripts
         RUN chmod 755 /scripts/*
+```
 
 1. Add the Wordpress source from gzip tar file. podman will extract the files. Also, modify permissions to support non-root container runtime. Switch to port 8080 for non-root apache runtime.
 
+```
         COPY latest.tar.gz /latest.tar.gz
         RUN tar xvzf /latest.tar.gz -C /var/www/html --strip-components=1 && \
             rm /latest.tar.gz && \
@@ -154,22 +176,30 @@ Now we'll create the Wordpress Dockerfile. (As before, there is a reference file
             APACHE_DIRS="/var/www/html /usr/share/httpd /var/log/httpd /run/httpd" && \
             chown -R apache:0 ${APACHE_DIRS} && \
             chmod -R g=u ${APACHE_DIRS}
+```
 
 1. Add an instruction to expose the web server port.
 
+```
         EXPOSE 8080
-
+```
 1. Add a `VOLUME` instruction. This ensures data will be persisted even if the container is lost.
 
+```
         VOLUME /var/www/html/wp-content/uploads
+```
 
 1. Switch to a non-root `USER` uid. The default uid of the apache user is 48.
 
+```
         USER 48
+```
 
 1. Finish by adding the `CMD` instruction.
 
+```
         CMD ["/bin/bash", "/scripts/start.sh"]
+```
 
 Save the Dockerfile and exit the editor.
 
@@ -179,18 +209,24 @@ Now we are ready to build the images to test our Dockerfiles.
 
 1. Build each image. When building an image docker requires the path to the directory of the Dockerfile.
 
+```
         $ docker build -t mariadb mariadb/
         $ docker build -t wordpress wordpress/
+```
 
 1. If the build does not return `Successfully built <image_id>` then resolve the issue and build again. Once successful, list the images.
 
+```
         $ docker images
+```
 
 1. Create the local directories for persistent storage & set permissions for container runtime.
 
+```
         $ mkdir -p ~/workspace/pv/mysql ~/workspace/pv/uploads
         $ sudo chown -R 27 ~/workspace/pv/mysql
         $ sudo chown -R 48 ~/workspace/pv/uploads
+```
 
 1. Run the wordpress image first. It takes some time to discover all of the necessary `docker run` options.
 
