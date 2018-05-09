@@ -90,5 +90,35 @@ It could take up to 5 minutes for the changes to be registered with the OpenShif
 ## Provision a service
 Now that we have the service catalog installed and ready to use on the cluster. Let's provision a new SQS queue in a brand new project using the OpenShift console.
 
+### Navigate to the new project. 
+Make sure that you are in the new project in the OpenShift Console, by clicking on the project list names in the top left corner, and selecting the new project you created when provisioning the SQS queue.
+![Add Secrets](img/change-project.png "Add APB Secrets")
+
+### Deploy a new image. 
+In the right hand side of the console, click on "Add to Project" and in the dropdown select "Deploy an Image"
+![Add Secrets](img/deploy-image.png "Add APB Secrets")
+
+### Type in the Image Name and Deploy
+In the pop-up that gets displayed, enter the image name you want to deploy `mandusm/sqs-sample`. Click the magnifying glass icon to load the metadata from the Docker Repository. 
+![Add Secrets](img/image-metadata.png "Add APB Secrets")
+
+### Deploy the image. 
+Now deploy the image by clicking on the `Deploy` button. 
+
+### Create route. 
+Now that the application has been provisioned, we need to expose a route for it in order to open it in our browsers. In the console, click the downward facing arrow next to the application pod to expand the pod details. Find the `expose route` link. Click on it, leave everything in the new form as default, and click `create`
+![Add Secrets](img/create-route.png "Add APB Secrets")
+
+Once this is done, you should see a new URl available above your pod. Click on this URL to open your app in a new browser tab. You can expect to see an error of missing credentials / parameters. 
+
+### Create Binding. 
+Earlier we created the SQS Service. Navigate back to the service in the console and look for the `Create Binding` hyperlink. Click it and follow the pop-up wizard. Leave everything default. 
+
+Now that the secret has been created, attach it to your application. Click on `view secret`, then on `add to application` in the top right. Select the application you launched earlier from the drop down. Leave the secrets as environment variables and click save. 
+
+Your pods should now automatically restart.
+
+### Verify
+Go back to the sample webpage that gave you errors earlier and refresh the page. You should now see the app returning request IDs
 
 
