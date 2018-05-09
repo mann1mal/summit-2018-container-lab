@@ -24,6 +24,8 @@ chmod 400 ocp-lab.pem
 
 If you are using `Windows` and `Putty`, download the PPK file and log in using `Putty`
 
+Important!: The Linux user to log in with is `ec2-user`
+
 ## Connecting to your AWS Instance
 This lab should be performed on **YOUR ASSIGNED AWS INSTANCE** as `ec2-user` unless otherwise instructed.
 
