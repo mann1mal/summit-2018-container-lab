@@ -71,7 +71,7 @@ $ docker images
 
 Here we are just going to explore a simple Dockerfile. The purpose for this is to have a look at some of the basic commands that are used to construct a docker image. For this lab, we will explore a basic Apache Dockerfile and then confirm functionality.
 
-Change to `~/aws-loft-2017-container-lab/labs/lab1` and `cat` out the Dockerfile
+Change to `~/summit-2018-container-lab/labs/lab1` and `cat` out the Dockerfile
 ```bash
 $ cd ~/aws-loft-2017-container-lab/labs/lab1
 $ cat Dockerfile
