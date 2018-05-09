@@ -43,10 +43,12 @@ oc get clusterservicebroker
 ```
 
 The expected result will list the AWS Service Broker and the OpenShift Template broker.
-![Successful install](img/oc-get-csb.png "Successful install")
+
+![Successful install](/api/workshops/openshift_rh_summit_2018/content/assets/labs/awssb/img/oc-get-csb.png "Successful install")
 
 If you now log into your cluster through the web console. The Service catalog should show a populated list of AWS Services
-![AWS Catalog](img/sc-awssb-listing.png "List of AWS Services")
+
+![AWS Catalog](/api/workshops/openshift_rh_summit_2018/content/assets/labs/awssb/img/sc-awssb-listing.png "List of AWS Services")
 
 ## Configure the Service Broker to populate parameters. 
 In this section we want to add a secret and some mapping to the AWS Service Broker deployment that will automatically be consumed by the broker, so that we don't need to pass it every time.
@@ -77,7 +79,8 @@ In the `broker-config: |` section add the below line
 ```
 
 The resulting file should look like this
-![Add Secrets](img/add-awssb-secret.png "Add APB Secrets")
+
+![Add Secrets](/api/workshops/openshift_rh_summit_2018/content/assets/labs/awssb/img/add-awssb-secret.png "Add APB Secrets")
 
 Now we need to restart the service broker pod in order for the changes to propogate to the OpenShift Service Catalog
 
@@ -92,22 +95,26 @@ Now that we have the service catalog installed and ready to use on the cluster. 
 
 ### Navigate to the new project. 
 Make sure that you are in the new project in the OpenShift Console, by clicking on the project list names in the top left corner, and selecting the new project you created when provisioning the SQS queue.
-![Add Secrets](img/change-project.png "Add APB Secrets")
+
+![Add Secrets](/api/workshops/openshift_rh_summit_2018/content/assets/labs/awssb/img/change-project.png "Add APB Secrets")
 
 ### Deploy a new image. 
 In the right hand side of the console, click on "Add to Project" and in the dropdown select "Deploy an Image"
-![Add Secrets](img/deploy-image.png "Add APB Secrets")
+
+![Add Secrets](/api/workshops/openshift_rh_summit_2018/content/assets/labs/awssb/img/deploy-image.png "Add APB Secrets")
 
 ### Type in the Image Name and Deploy
 In the pop-up that gets displayed, enter the image name you want to deploy `mandusm/sqs-sample`. Click the magnifying glass icon to load the metadata from the Docker Repository. 
-![Add Secrets](img/image-metadata.png "Add APB Secrets")
+
+![Add Secrets](/api/workshops/openshift_rh_summit_2018/content/assets/labs/awssb/img/image-metadata.png "Add APB Secrets")
 
 ### Deploy the image. 
 Now deploy the image by clicking on the `Deploy` button. 
 
 ### Create route. 
 Now that the application has been provisioned, we need to expose a route for it in order to open it in our browsers. In the console, click the downward facing arrow next to the application pod to expand the pod details. Find the `expose route` link. Click on it, leave everything in the new form as default, and click `create`
-![Add Secrets](img/create-route.png "Add APB Secrets")
+
+![Add Secrets](/api/workshops/openshift_rh_summit_2018/content/assets/labs/awssb/img/create-route.png "Add APB Secrets")
 
 Once this is done, you should see a new URl available above your pod. Click on this URL to open your app in a new browser tab. You can expect to see an error of missing credentials / parameters. 
 
