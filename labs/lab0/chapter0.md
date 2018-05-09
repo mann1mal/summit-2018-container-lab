@@ -11,7 +11,11 @@ This lab is designed to accommodate many students. As a result, each student wil
 
 You will be assigned a number by the instructor.
 
-Retrieve the key from the [instructor host](http://s3-us-west-2.amazonaws.com/redhat-lunch-learn-lab/index.html) so that you can _SSH_ into the instances by accessing the password protected directory from the table above. Download the .PEM or .PPK file to your local machine and change the permissions of the file to 600.
+Retrieve the key from the Download links here
+- [SSH Private Key - PEM ](https://s3-us-west-2.amazonaws.com/redhat-lunch-learn-lab/keys/ocp-lab.pem)
+- [SSH Private Key - PPK ](https://s3-us-west-2.amazonaws.com/redhat-lunch-learn-lab/keys/ocp-lab.ppk)
+
+You can now _SSH_ into the instances by downloading the `.PEM` or `.PPK` file to your local machine and change the permissions of the file to `400`.
 
 ## Connecting to your AWS Instance
 This lab should be performed on **YOUR ASSIGNED AWS INSTANCE** as `ec2-user` unless otherwise instructed.
