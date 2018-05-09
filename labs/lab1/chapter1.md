@@ -73,7 +73,7 @@ Here we are just going to explore a simple Dockerfile. The purpose for this is t
 
 Change to `~/summit-2018-container-lab/labs/lab1` and `cat` out the Dockerfile
 ```bash
-$ cd ~/aws-loft-2017-container-lab/labs/lab1
+$ cd ~/summit-2018-container-lab/labs/lab1
 $ cat Dockerfile
 ```
 ```
