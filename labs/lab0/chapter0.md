@@ -88,7 +88,7 @@ Clone the lab repository from github:
 
 ```bash
 $ cd ~/
-$ git clone https://github.com/mann1mal/summit-2018-container-lab
+$ git clone https://github.com/mandusm/summit-2018-container-lab.git
 ```
 
 ## OpenShift Container Platform
