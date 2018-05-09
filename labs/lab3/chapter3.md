@@ -259,6 +259,7 @@ $ curl -L http://localhost:8080
 5. Bring up the database (mariadb) for the wordpress instance. For the mariadb container we need to specify an additional option to make sure it is in the same "network" as the apache/wordpress container and not visible outside that container:
 
   * `--network=container:<alias>` to link to the wordpress container
+    
 ```bash
 $ ls -lZd ~/workspace/pv/mysql
 $ docker run -d --network=container:wordpress -v ~/workspace/pv/mysql:/var/lib/mysql:z -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb --name mariadb mariadb
