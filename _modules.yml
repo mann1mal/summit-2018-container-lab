@@ -21,5 +21,5 @@ modules:
     name: Deploying it
   labs_lab5_chapter5:
     name: Deploying it easy
-  labs_lab6_chapter6:
-    name: Consuming other things
+  labs_awssb_awssb:
+    name: Provision cloud services
