@@ -94,5 +94,3 @@ $ git clone https://github.com/mandusm/summit-2018-container-lab.git
 ## OpenShift Container Platform
 
 What is OpenShift? OpenShift, which you may remember as a "[PaaS](https://en.wikipedia.org/wiki/Platform_as_a_service)" to build applications on, has evolved into a complete container platform based on Kubernetes. If you remember the "[DIY Cartridges](https://github.com/openshift/origin-server/blob/master/documentation/oo_cartridge_guide.adoc#diy)" from older versions of Openshift, essentially, OpenShift v3 has expanded the functionality to provide complete containers. With OpenShift, you can build from a platform, build from scratch, or anything else you can do in a container, and still get the complete lifecycle automation you loved in the older versions.
-
-You are now ready to move on to the [next lab](../lab1/chapter1.md).
