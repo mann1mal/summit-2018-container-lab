@@ -1,4 +1,4 @@
-# LAB 1: Introduction to Docker
+# Introduction to Docker
 
 **Note: This lab is optional and does NOT need to be completed in order to move on to the next lab.**
 
