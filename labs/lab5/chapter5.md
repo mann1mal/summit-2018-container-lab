@@ -1,4 +1,4 @@
-# LAB 5: OpenShift templates and web console
+# OpenShift templates and web console
 
 In this lab we introduce how to simplify your container deployments with OpenShift templates.  We will also explore the web console.
 
