@@ -1,4 +1,5 @@
-## Introduction
+# The AWS Service Broker
+
 In this lab, we are going to build upon the previous labs and leverage what we have learned to utilize the [AWS Service Broker](https://github.com/awslabs/aws-servicebroker) to provision AWS Services and use them in your OpenShift environment.
 
 Expected completion: 10-20 minutes
