@@ -1,6 +1,6 @@
 # LAB 1: Introduction to Docker
 
-**Note: This lab is optional and does NOT need to be completed in order to move on to the next lab. [Click Here](../lab2/chapter2.md) to skip to the next lab**
+**Note: This lab is optional and does NOT need to be completed in order to move on to the next lab.**
 
 In this lab we will explore the docker environment. If you are familiar with docker this may function as a brief refresher. If you are new to docker this will serve as an introduction to docker basics. Don't worry, we will progress rapidly. To get through this lab, we are going to focus on the environment itself as well as walk through some exercises with a couple of docker images/containers to tell a complete story and point out some things that you might have to consider when containerizing your application.
 
@@ -169,4 +169,4 @@ Before we move on to the next section let's clean up the apache container so we 
 $ docker rm -f apache
 ```
 
-In the [next lab](../lab2/chapter2.md) we will be analyzing a monolithic application.
+In the next lab we will be analyzing a monolithic application.
