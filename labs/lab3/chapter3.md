@@ -8,64 +8,6 @@ NOTE: In the steps below we use `vi` to edit files.  If you are unfamiliar this 
 
 Expected completion: 20-30 minutes
 
-## Decompose the application
-
-**Note: if you skipped lab 2, move on to the "Create the Dockerfiles" section**
-
-In the previous lab we created an "all-in-one" application. Let's enter the container and explore.
-
-```bash
-$ docker exec -it bigapp /bin/bash
-```
-
-### Services
-
-From the container namespace list the log directories.
-
-```bash
-[CONTAINER_NAMESPACE]# ls -l /var/log/
-```
-
-We see `httpd` and `mariadb`. These are the services that make up the Wordpress application.
-
-### Ports
-
-We saw in the Dockerfile that port 80 was exposed. This is for the web server. Let's look at the mariadb logs for the port the database uses:
-
-```bash
-[CONTAINER_NAMESPACE]# grep port /var/log/mariadb/mariadb.log
-```
-
-This shows port 3306 is used.
-
-### Storage
-
-#### Web server
-
-The Wordpress tar file was extracted into `/var/www/html`. List the files.
-
-```bash
-[CONTAINER_NAMESPACE]# ls -l /var/www/html
-```
-
-These are sensitive files for our application and it would be unfortunate if changes to these files were lost. Currently the running container does not have any associated "volumes", which means that if this container dies all changes will be lost. This mount point in the container should be backed by a "volume". Later in this lab we'll use a host directory backed "volume" to make sure these files persist.
-
-#### Database
-
-Inspect the `mariadb.log` file to discover the database directory.
-```bash
-[CONTAINER_NAMESPACE]# grep databases /var/log/mariadb/mariadb.log
-```
-
-Again, we have found some files that are in need of some non-volatile storage. The `/var/lib/mysql` should also be mounted to persistent storage on the host.
-
-Now that we've inspected the container stop and remove it. `docker ps -ql` prints the ID of the latest created container.  First you will need to exit the container.
-```bash
-[CONTAINER_NAMESPACE]# exit
-$ docker stop $(docker ps -ql)
-$ docker rm $(docker ps -ql)
-```
-
 ## Create the Dockerfiles
 
 Now we will develop the two images. Using the information above and the Dockerfile from Lab 2 as a guide, we will create Dockerfiles for each service. For this lab we have created a directory for each service with the required files for the service. Please explore these directories and check out the contents and the startup scripts.
