@@ -1,4 +1,4 @@
-## Introduction
+# The AWS Service Broker
 
 In this lab, we are going to build upon the previous labs and leverage what we have learned to utilize the [Automation Broker](http://automationbroker.io/) (nee OpenShift Ansible Service Broker). As part of this process, we will be using the latest upstream release available for this project. By the time you are finished with the lab, you will have deployed an application, a database and bound the two together. It should become evident how this self service process can improve the productivity of developers on your team.
 
