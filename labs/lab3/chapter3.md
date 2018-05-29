@@ -4,7 +4,7 @@ In this lab you will deconstruct an application into microservices, creating a m
 
 This lab should be performed on **YOUR ASSIGNED AWS VM** as `ec2-user` unless otherwise instructed.
 
-NOTE: In the steps below we use `vi` to edit files.  If you are unfamiliar this is a [good beginner's guide](https://www.howtogeek.com/102468/a-beginners-guide-to-editing-text-files-with-vi/).
+**Note**: In the steps below we use `vi` to edit files.  If you are unfamiliar this is a [good beginner's guide](https://www.howtogeek.com/102468/a-beginners-guide-to-editing-text-files-with-vi/).
 
 Expected completion: 20-30 minutes
 
@@ -181,7 +181,7 @@ $ ls -lZd ~/workspace/pv/uploads
 $ docker run -d -p 8080:8080 -v ~/workspace/pv/uploads:/var/www/html/wp-content/uploads:z -e DB_ENV_DBUSER=user -e DB_ENV_DBPASS=mypassword -e DB_ENV_DBNAME=mydb -e DB_HOST=0.0.0.0 -e DB_PORT=3306 --name wordpress wordpress
 ```
 
-Note: See the difference in SELinux context after running w/ a volume & :Z.
+**Note**: See the difference in SELinux context after running w/ a volume & :Z.
 ```bash
 $ ls -lZd ~/workspace/pv/uploads
 $ docker exec $(docker ps -ql) ps aux
@@ -207,7 +207,7 @@ $ ls -lZd ~/workspace/pv/mysql
 $ docker run -d --network=container:wordpress -v ~/workspace/pv/mysql:/var/lib/mysql:z -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb --name mariadb mariadb
 ```
 
-Note: See the difference in SELinux context after running w/ a volume & :z.
+**Note**: See the difference in SELinux context after running w/ a volume & :z.
 ```bash
 $ ls -lZd ~/workspace/pv/mysql
 $ ls -lZ ~/workspace/pv/mysql
