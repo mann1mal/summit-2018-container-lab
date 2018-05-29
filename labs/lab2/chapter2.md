@@ -1,6 +1,6 @@
 # LAB 2: Analyzing a Monolithic Application
 
-**Note: This lab is optional and does NOT need to be completed in order to move on to the next lab. [Click Here](../lab3/chapter3.md) to skip to the next lab**
+**Note: This lab is optional and does NOT need to be completed in order to move on to the next lab.**
 
 Typically, it is best to break down services into the simplest components and then containerize each of them independently. However, when initially migrating an application it is not always easy to break it up into little pieces but you can start with big containers and work towards breaking them into smaller pieces.
 
@@ -172,4 +172,4 @@ More generally:
 * Avoid running application as root user where possible.
 * Use `VOLUME` instruction to create a host mount point for persistent storage.
 
-In the [next lab](../lab3/chapter3.md) we will fix these issues and break the application up into separate services.
+In the next lab we will fix these issues and break the application up into separate services.
