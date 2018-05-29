@@ -22,25 +22,25 @@ $ ls -lR wordpress
 
 ### MariaDB Dockerfile
 
-1. In a text editor create a file named `Dockerfile` in the `mariadb` directory. (There is a reference file in the `mariadb` directory if needed)
+* In a text editor create a file named `Dockerfile` in the `mariadb` directory. (There is a reference file in the `mariadb` directory if needed)
 
         $ vi mariadb/Dockerfile
 
-1. Add a `FROM` line that uses a specific image tag. Also add `MAINTAINER` information.
+* Add a `FROM` line that uses a specific image tag. Also add `MAINTAINER` information.
 
 ```
         FROM registry.access.redhat.com/rhel7:7.5-231
         MAINTAINER Student <student@example.com>
 ```
 
-1. Add the required packages. We'll include `yum clean all` at the end to clear the yum cache.
+* Add the required packages. We'll include `yum clean all` at the end to clear the yum cache.
 
 ```
         RUN yum -y install --disablerepo "*" --enablerepo rhel-7-server-rpms \
               mariadb-server openssl psmisc net-tools hostname && \
             yum clean all
 ```
-1. Add the dependent scripts and modify permissions to support non-root container runtime.
+* Add the dependent scripts and modify permissions to support non-root container runtime.
 
 ```
         ADD scripts /scripts
@@ -50,50 +50,50 @@ $ ls -lR wordpress
             chmod -R g=u ${MARIADB_DIRS}
 ```
 
-1. Add an instruction to expose the database port.
+* Add an instruction to expose the database port.
 
 ```
         EXPOSE 3306
 ```
 
-1. Add a `VOLUME` instruction. This ensures data will be persisted even if the container is lost. However, it won't do anything unless, when running the container, host directories are mapped to the volumes.
+* Add a `VOLUME` instruction. This ensures data will be persisted even if the container is lost. However, it won't do anything unless, when running the container, host directories are mapped to the volumes.
 
 ```
         VOLUME /var/lib/mysql
 ```
 
-1. Switch to a non-root `USER` uid. The default uid of the mysql user is 27.
+* Switch to a non-root `USER` uid. The default uid of the mysql user is 27.
 
 ```
         USER 27
 ```
 
-1. Finish by adding the `CMD` instruction.
+* Finish by adding the `CMD` instruction.
 
 ```
         CMD ["/bin/bash", "/scripts/start.sh"]
 ```
 
-Save the file and exit the editor.
+* Save the file and exit the editor.
 
 ### Wordpress Dockerfile
 
 Now we'll create the Wordpress Dockerfile. (As before, there is a reference file in the `wordpress` directory if needed)
 
-1. Using a text editor create a file named `Dockerfile` in the `wordpress` directory.
+* Using a text editor create a file named `Dockerfile` in the `wordpress` directory.
 
 ```
         $ vi wordpress/Dockerfile
 ```
 
-1. Add a `FROM` line that uses a specific image tag. Also add `MAINTAINER` information.
+* Add a `FROM` line that uses a specific image tag. Also add `MAINTAINER` information.
 
 ```
         FROM registry.access.redhat.com/rhel7:7.5-231
         MAINTAINER Student <student@example.com>
 ```
 
-1. Add the required packages. We'll include `yum clean all` at the end to clear the yum cache.
+* Add the required packages. We'll include `yum clean all` at the end to clear the yum cache.
 
 ```
         RUN yum -y install --disablerepo "*" --enablerepo rhel-7-server-rpms \
@@ -101,14 +101,14 @@ Now we'll create the Wordpress Dockerfile. (As before, there is a reference file
             yum clean all
 ```
 
-1. Add the dependent scripts and make them executable.
+* Add the dependent scripts and make them executable.
 
 ```
         ADD scripts /scripts
         RUN chmod 755 /scripts/*
 ```
 
-1. Add the Wordpress source from gzip tar file. podman will extract the files. Also, modify permissions to support non-root container runtime. Switch to port 8080 for non-root apache runtime.
+* Add the Wordpress source from gzip tar file. podman will extract the files. Also, modify permissions to support non-root container runtime. Switch to port 8080 for non-root apache runtime.
 
 ```
         COPY latest.tar.gz /latest.tar.gz
@@ -120,49 +120,49 @@ Now we'll create the Wordpress Dockerfile. (As before, there is a reference file
             chmod -R g=u ${APACHE_DIRS}
 ```
 
-1. Add an instruction to expose the web server port.
+* Add an instruction to expose the web server port.
 
 ```
         EXPOSE 8080
 ```
-1. Add a `VOLUME` instruction. This ensures data will be persisted even if the container is lost.
+* Add a `VOLUME` instruction. This ensures data will be persisted even if the container is lost.
 
 ```
         VOLUME /var/www/html/wp-content/uploads
 ```
 
-1. Switch to a non-root `USER` uid. The default uid of the apache user is 48.
+* Switch to a non-root `USER` uid. The default uid of the apache user is 48.
 
 ```
         USER 48
 ```
 
-1. Finish by adding the `CMD` instruction.
+* Finish by adding the `CMD` instruction.
 
 ```
         CMD ["/bin/bash", "/scripts/start.sh"]
 ```
 
-Save the Dockerfile and exit the editor.
+* Save the Dockerfile and exit the editor.
 
 ## Build Images, Test and Push
 
 Now we are ready to build the images to test our Dockerfiles.
 
-1. Build each image. When building an image docker requires the path to the directory of the Dockerfile.
+* Build each image. When building an image docker requires the path to the directory of the Dockerfile.
 
 ```
         $ docker build -t mariadb mariadb/
         $ docker build -t wordpress wordpress/
 ```
 
-1. If the build does not return `Successfully built <image_id>` then resolve the issue and build again. Once successful, list the images.
+* If the build does not return `Successfully built <image_id>` then resolve the issue and build again. Once successful, list the images.
 
 ```
         $ docker images
 ```
 
-1. Create the local directories for persistent storage & set permissions for container runtime.
+* Create the local directories for persistent storage & set permissions for container runtime.
 
 ```
         $ mkdir -p ~/workspace/pv/mysql ~/workspace/pv/uploads
@@ -170,7 +170,7 @@ Now we are ready to build the images to test our Dockerfiles.
         $ sudo chown -R 48 ~/workspace/pv/uploads
 ```
 
-1. Run the wordpress image first. It takes some time to discover all of the necessary `docker run` options.
+* Run the wordpress image first. It takes some time to discover all of the necessary `docker run` options.
 
   * `-d` to run in daemonized mode
   * `-v <host/path>:<container/path>:z` to mount (technically, "bindmount") the directory for persistent storage. The :z option will label the content inside the container with the SELinux MCS label that the container uses so that the container can write to the directory. Below we'll inspect the labels on the directories before and after we run the container to see the changes on the labels in the directories
@@ -187,7 +187,7 @@ $ ls -lZd ~/workspace/pv/uploads
 $ docker exec $(docker ps -ql) ps aux
 ```
 
-Check volume directory ownership inside the container
+* Check volume directory ownership inside the container
 ```bash
 $ docker exec $(docker ps -ql) stat --format="%U" /var/www/html/wp-content/uploads
 $ docker logs $(docker ps -ql)
@@ -198,7 +198,7 @@ $ curl -L http://localhost:8080
   **Note**: the `curl` command does not return useful information but demonstrates
             a response on the port.
 
-5. Bring up the database (mariadb) for the wordpress instance. For the mariadb container we need to specify an additional option to make sure it is in the same "network" as the apache/wordpress container and not visible outside that container:
+* Bring up the database (mariadb) for the wordpress instance. For the mariadb container we need to specify an additional option to make sure it is in the same "network" as the apache/wordpress container and not visible outside that container:
 
   * `--network=container:<alias>` to link to the wordpress container
     
@@ -213,12 +213,12 @@ $ ls -lZd ~/workspace/pv/mysql
 $ ls -lZ ~/workspace/pv/mysql
 $ docker exec $(docker ps -ql) ps aux
 ```
-Check volume directory ownership inside the container
+* Check volume directory ownership inside the container
 ```bash
 $ docker exec $(docker ps -ql) stat --format="%U" /var/lib/mysql
 ```
 
-Now we can check out how the database is doing
+* Now we can check out how the database is doing
 ```bash
 $ docker logs $(docker ps -ql)
 $ docker ps
@@ -255,33 +255,33 @@ $ docker ps
 
 ### Push images to local registry
 
-1. Once satisfied with the images tag them with the URI of the local lab local registry. The tag is what OpenShift uses to identify the particular image that we want to import from the registry.
+* Once satisfied with the images tag them with the URI of the local lab local registry. The tag is what OpenShift uses to identify the particular image that we want to import from the registry.
 
         $ docker tag mariadb localhost:5000/mariadb
         $ docker tag wordpress localhost:5000/wordpress
         $ docker images
 
-1. Push the images
+* Push the images
 
         $ docker push localhost:5000/mariadb
         $ docker push localhost:5000/wordpress
 
 ## Clean Up
 
-Stop the mariadb and wordpress containers.
+* Stop the mariadb and wordpress containers.
 
 ```bash
 $ docker ps
 $ docker stop mariadb wordpress
 ```
 
-After iterating through running docker images you will likely end up with many stopped containers. List them.
+* After iterating through running docker images you will likely end up with many stopped containers. List them.
 
 ```bash
 $ docker ps -a
 ```
 
-This command is useful in freeing up disk space by removing all stopped containers.
+* This command is useful in freeing up disk space by removing all stopped containers.
 
 ```bash
 $ docker rm $(docker ps -qa)
@@ -290,4 +290,4 @@ $ docker rm $(docker ps -qa)
 This command will result in a cosmetic error because it is trying to stop running containers like the registry and the OpenShift containers that are running. These errors can safely be ignored.
 
 
-In the [next lab](../lab4/chapter4.md) we introduce container orchestration via OpenShift.
+In the next we introduce container orchestration via OpenShift.
