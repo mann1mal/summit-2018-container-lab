@@ -31,21 +31,21 @@ $ ls -lR wordpress
 
 * Add a `FROM` line that uses a specific image tag. Also add `MAINTAINER` information.
 
-```docker
+```bash
         FROM registry.access.redhat.com/rhel7:7.5-231
         MAINTAINER Student <student@example.com>
 ```
 
 * Add the required packages. We'll include `yum clean all` at the end to clear the yum cache.
 
-```docker
+```bash
         RUN yum -y install --disablerepo "*" --enablerepo rhel-7-server-rpms \
               mariadb-server openssl psmisc net-tools hostname && \
             yum clean all
 ```
 * Add the dependent scripts and modify permissions to support non-root container runtime.
 
-```docker
+```bash
         ADD scripts /scripts
         RUN chmod 755 /scripts/* && \
             MARIADB_DIRS="/var/lib/mysql /var/log/mariadb /run/mariadb" && \
@@ -55,25 +55,25 @@ $ ls -lR wordpress
 
 * Add an instruction to expose the database port.
 
-```docker
+```bash
         EXPOSE 3306
 ```
 
 * Add a `VOLUME` instruction. This ensures data will be persisted even if the container is lost. However, it won't do anything unless, when running the container, host directories are mapped to the volumes.
 
-```docker
+```bash
         VOLUME /var/lib/mysql
 ```
 
 * Switch to a non-root `USER` uid. The default uid of the mysql user is 27.
 
-```docker
+```bash
         USER 27
 ```
 
 * Finish by adding the `CMD` instruction.
 
-```docker
+```bash
         CMD ["/bin/bash", "/scripts/start.sh"]
 ```
 
@@ -91,14 +91,14 @@ Now we'll create the Wordpress Dockerfile. (As before, there is a reference file
 
 * Add a `FROM` line that uses a specific image tag. Also add `MAINTAINER` information.
 
-```docker
+```bash
         FROM registry.access.redhat.com/rhel7:7.5-231
         MAINTAINER Student <student@example.com>
 ```
 
 * Add the required packages. We'll include `yum clean all` at the end to clear the yum cache.
 
-```docker
+```bash
         RUN yum -y install --disablerepo "*" --enablerepo rhel-7-server-rpms \
               httpd php php-mysql php-gd openssl psmisc && \
             yum clean all
@@ -106,14 +106,14 @@ Now we'll create the Wordpress Dockerfile. (As before, there is a reference file
 
 * Add the dependent scripts and make them executable.
 
-```docker
+```bash
         ADD scripts /scripts
         RUN chmod 755 /scripts/*
 ```
 
 * Add the Wordpress source from gzip tar file. podman will extract the files. Also, modify permissions to support non-root container runtime. Switch to port 8080 for non-root apache runtime.
 
-```docker
+```bash
         COPY latest.tar.gz /latest.tar.gz
         RUN tar xvzf /latest.tar.gz -C /var/www/html --strip-components=1 && \
             rm /latest.tar.gz && \
@@ -125,25 +125,25 @@ Now we'll create the Wordpress Dockerfile. (As before, there is a reference file
 
 * Add an instruction to expose the web server port.
 
-```docker
+```bash
         EXPOSE 8080
 ```
 
 * Add a `VOLUME` instruction. This ensures data will be persisted even if the container is lost.
 
-```docker
+```bash
         VOLUME /var/www/html/wp-content/uploads
 ```
 
 * Switch to a non-root `USER` uid. The default uid of the apache user is 48.
 
-```docker
+```bash
         USER 48
 ```
 
 * Finish by adding the `CMD` instruction.
 
-```docker
+```bash
         CMD ["/bin/bash", "/scripts/start.sh"]
 ```
 
