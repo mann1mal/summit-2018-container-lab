@@ -24,7 +24,9 @@ $ ls -lR wordpress
 
 * In a text editor create a file named `Dockerfile` in the `mariadb` directory. (There is a reference file in the `mariadb` directory if needed)
 
+```
         $ vi mariadb/Dockerfile
+```
 
 * Add a `FROM` line that uses a specific image tag. Also add `MAINTAINER` information.
 
