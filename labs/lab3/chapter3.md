@@ -184,12 +184,14 @@ $ docker run -d -p 8080:8080 -v ~/workspace/pv/uploads:/var/www/html/wp-content/
 ```
 
 **Note**: See the difference in SELinux context after running w/ a volume & :Z.
+
 ```bash
 $ ls -lZd ~/workspace/pv/uploads
 $ docker exec $(docker ps -ql) ps aux
 ```
 
 * Check volume directory ownership inside the container
+
 ```bash
 $ docker exec $(docker ps -ql) stat --format="%U" /var/www/html/wp-content/uploads
 $ docker logs $(docker ps -ql)
