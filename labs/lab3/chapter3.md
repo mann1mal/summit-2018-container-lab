@@ -11,6 +11,7 @@ Expected completion: 20-30 minutes
 ## Create the Dockerfiles
 
 Now we will develop the two images. Using the information above and the Dockerfile from Lab 2 as a guide, we will create Dockerfiles for each service. For this lab we have created a directory for each service with the required files for the service. Please explore these directories and check out the contents and the startup scripts.
+
 ```bash
 $ mkdir ~/workspace
 $ cd ~/workspace
@@ -24,27 +25,27 @@ $ ls -lR wordpress
 
 * In a text editor create a file named `Dockerfile` in the `mariadb` directory. (There is a reference file in the `mariadb` directory if needed)
 
-```
+```bash
         $ vi mariadb/Dockerfile
 ```
 
 * Add a `FROM` line that uses a specific image tag. Also add `MAINTAINER` information.
 
-```
+```docker
         FROM registry.access.redhat.com/rhel7:7.5-231
         MAINTAINER Student <student@example.com>
 ```
 
 * Add the required packages. We'll include `yum clean all` at the end to clear the yum cache.
 
-```
+```docker
         RUN yum -y install --disablerepo "*" --enablerepo rhel-7-server-rpms \
               mariadb-server openssl psmisc net-tools hostname && \
             yum clean all
 ```
 * Add the dependent scripts and modify permissions to support non-root container runtime.
 
-```
+```docker
         ADD scripts /scripts
         RUN chmod 755 /scripts/* && \
             MARIADB_DIRS="/var/lib/mysql /var/log/mariadb /run/mariadb" && \
@@ -54,25 +55,25 @@ $ ls -lR wordpress
 
 * Add an instruction to expose the database port.
 
-```
+```docker
         EXPOSE 3306
 ```
 
 * Add a `VOLUME` instruction. This ensures data will be persisted even if the container is lost. However, it won't do anything unless, when running the container, host directories are mapped to the volumes.
 
-```
+```docker
         VOLUME /var/lib/mysql
 ```
 
 * Switch to a non-root `USER` uid. The default uid of the mysql user is 27.
 
-```
+```docker
         USER 27
 ```
 
 * Finish by adding the `CMD` instruction.
 
-```
+```docker
         CMD ["/bin/bash", "/scripts/start.sh"]
 ```
 
@@ -84,20 +85,20 @@ Now we'll create the Wordpress Dockerfile. (As before, there is a reference file
 
 * Using a text editor create a file named `Dockerfile` in the `wordpress` directory.
 
-```
+```bash
         $ vi wordpress/Dockerfile
 ```
 
 * Add a `FROM` line that uses a specific image tag. Also add `MAINTAINER` information.
 
-```
+```docker
         FROM registry.access.redhat.com/rhel7:7.5-231
         MAINTAINER Student <student@example.com>
 ```
 
 * Add the required packages. We'll include `yum clean all` at the end to clear the yum cache.
 
-```
+```docker
         RUN yum -y install --disablerepo "*" --enablerepo rhel-7-server-rpms \
               httpd php php-mysql php-gd openssl psmisc && \
             yum clean all
@@ -105,14 +106,14 @@ Now we'll create the Wordpress Dockerfile. (As before, there is a reference file
 
 * Add the dependent scripts and make them executable.
 
-```
+```docker
         ADD scripts /scripts
         RUN chmod 755 /scripts/*
 ```
 
 * Add the Wordpress source from gzip tar file. podman will extract the files. Also, modify permissions to support non-root container runtime. Switch to port 8080 for non-root apache runtime.
 
-```
+```docker
         COPY latest.tar.gz /latest.tar.gz
         RUN tar xvzf /latest.tar.gz -C /var/www/html --strip-components=1 && \
             rm /latest.tar.gz && \
@@ -124,24 +125,25 @@ Now we'll create the Wordpress Dockerfile. (As before, there is a reference file
 
 * Add an instruction to expose the web server port.
 
-```
+```docker
         EXPOSE 8080
 ```
+
 * Add a `VOLUME` instruction. This ensures data will be persisted even if the container is lost.
 
-```
+```docker
         VOLUME /var/www/html/wp-content/uploads
 ```
 
 * Switch to a non-root `USER` uid. The default uid of the apache user is 48.
 
-```
+```docker
         USER 48
 ```
 
 * Finish by adding the `CMD` instruction.
 
-```
+```docker
         CMD ["/bin/bash", "/scripts/start.sh"]
 ```
 
@@ -153,20 +155,20 @@ Now we are ready to build the images to test our Dockerfiles.
 
 * Build each image. When building an image docker requires the path to the directory of the Dockerfile.
 
-```
+```bash
         $ docker build -t mariadb mariadb/
         $ docker build -t wordpress wordpress/
 ```
 
 * If the build does not return `Successfully built <image_id>` then resolve the issue and build again. Once successful, list the images.
 
-```
+```bash
         $ docker images
 ```
 
 * Create the local directories for persistent storage & set permissions for container runtime.
 
-```
+```bash
         $ mkdir -p ~/workspace/pv/mysql ~/workspace/pv/uploads
         $ sudo chown -R 27 ~/workspace/pv/mysql
         $ sudo chown -R 48 ~/workspace/pv/uploads
@@ -212,17 +214,21 @@ $ docker run -d --network=container:wordpress -v ~/workspace/pv/mysql:/var/lib/m
 ```
 
 **Note**: See the difference in SELinux context after running w/ a volume & :z.
+
 ```bash
 $ ls -lZd ~/workspace/pv/mysql
 $ ls -lZ ~/workspace/pv/mysql
 $ docker exec $(docker ps -ql) ps aux
 ```
+
 * Check volume directory ownership inside the container
+
 ```bash
 $ docker exec $(docker ps -ql) stat --format="%U" /var/lib/mysql
 ```
 
 * Now we can check out how the database is doing
+
 ```bash
 $ docker logs $(docker ps -ql)
 $ docker ps
@@ -237,22 +243,26 @@ You may also load the Wordpress application in a browser to test its full functi
 To prepare for a later lab, let's deploy a simple registry to store our images.
 
 Navigate to the Lab3 directory
+
 ```bash
 $ cd ~/summit-2018-container-lab/labs/lab3
 ```
 
 Inspect the Dockerfile that has been prepared.
+
 ```bash
 $ cat registry/Dockerfile
 ```
 
 Build & run the registry
+
 ```bash
 $ docker build -t registry registry/
 $ docker run --restart="always" --name registry -p 5000:5000 -d registry
 ```
 
 Confirm the registry is running.
+
 ```bash
 $ docker ps
 ```
