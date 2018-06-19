@@ -1,0 +1,39 @@
+---
+- name: Enable OpenShift repository
+  command: >
+    subscription-manager repos
+      --enable="rhel-7-server-ose-{{ openshift_deploy_version }}-rpms"
+  become: true
+
+- name: Install package requirements for Tower CLI
+  yum:
+    name: "{{ item }}"
+    state: present
+  become: true
+  with_items:
+    - python2-pip
+    - git
+    - pyOpenSSL
+    - python-netaddr
+    - python-six
+    - python2-boto3
+    - python-click
+    - python-httplib2
+
+- name: Install Tower CLI
+  pip:
+    name: "{{ item }}"
+  become: true
+  with_items:
+    - ansible-tower-cli
+    - boto
+
+- debug:
+    var: "{{ item }}"
+    verbosity: 2
+  with_items:
+    - hostvars[inventory_hostname].friendly_name
+    - student_id
+    - filter
+    - tower_host
+...
