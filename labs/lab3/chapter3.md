@@ -271,15 +271,16 @@ $ docker ps
 
 * Once satisfied with the images tag them with the URI of the local lab local registry. The tag is what OpenShift uses to identify the particular image that we want to import from the registry.
 
+        ```
         $ docker tag mariadb localhost:5000/mariadb
         $ docker tag wordpress localhost:5000/wordpress
         $ docker images
-
+        ```
 * Push the images
-
+        ```
         $ docker push localhost:5000/mariadb
         $ docker push localhost:5000/wordpress
-
+        ```
 ## Clean Up
 
 * Stop the mariadb and wordpress containers.
