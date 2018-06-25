@@ -91,21 +91,20 @@ Now we need to restart the service broker pod in order for the changes to propog
 oc rollout latest aws-asb -n aws-service-broker
 ```
 
-It could take up to 5 minutes for the changes to be registered with the OpenShift Service Catalog. It's important that you wait for this change to happen, or the service provisioning will fail. You can confirm that the update is completed in two ways. 
+It could take up to 5 minutes for the changes to be registered with the OpenShift Service Catalog. It's important that you wait for this change to happen, or the service provisioning will fail. We need to confirm this update has happened. 
 
-1: Go back to the `OpenShift Console` and refresh the browser. If you see input fields for `aws_secret` or `aws_region` when provsioining the SQS Service. The refresh has not happened yet. 
-2: Run the below command.
+Run the below command.
 
 ```bash
-oc logs -n aws-service-broker --tail 40 $(oc get pods -n aws-service-broker | grep -oE 'aws-asb-[0-9]-[aA0-zZ9]*')
+oc logs -n aws-service-broker --tail 40 $(oc get pods -n aws-service-broker | grep -oE 'aws-asb-[0-9]-[aA0-zZ9]*') | grep "Filtering secrets"
 ```
 
 You should expect to see a line similar to this:
 ```
-[2018-06-25T20:57:31.942Z] [DEBUG] - Spec dh-sqs matched rule {dh-sqs aws-secret}
+[2018-06-25T21:14:03.967Z] [DEBUG] - Filtering secrets from spec dh-sqs
 ```
 
-### Create a New Project throuth the Catalog 
+### Create a New Project through the Catalog 
 Now that we have the service catalog installed and ready to use on the cluster. Let's provision a new SQS queue in a brand new project using the OpenShift console.
 
 Make sure you are on the welcome page of the `OpenShift Console`. Look for the icon that reads `Amazon SQS` and click on the Icon. This will open a new walkthrough wizard.
