@@ -8,7 +8,7 @@ Expected completion: 10-20 minutes
 The first step is to install the service broker into your cluster environment. Change your directory into the `awssb` directory and run the provided shell script to install the AWS service broker: `deploy_aws_broker.sh`
 
 ```bash
-cd awssb
+cd ~/summit-2018-container-lab/labs/awssb
 ./deploy_aws_broker.sh
 ```
 
