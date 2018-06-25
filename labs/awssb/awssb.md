@@ -54,10 +54,12 @@ If you now log into your cluster through the web console. The Service catalog sh
 ## Configure the Service Broker to populate parameters. 
 In this section we want to add a secret and some mapping to the AWS Service Broker deployment that will automatically be consumed by the broker, so that we don't need to pass it every time.
 
-First edit the `aws-servicebroker-secret.yaml` and replace `<cfn_role_arn>` with the value of `InstanceProfileArn` that gets returned from running the below command on your EC2 instance
+The AWS Service Broker requires an AWS IAM Role that it will assume when provisioning AWS Services. This is a security mechanism that will limit what the service broker can do. For this workshop, we created a role in our account that is recognized by the IAM Arn of `arn:aws:iam::<account-id>:role/aws-servicebroker-cfn-deploy-role`
+
+We need to edit our `aws-servicebroker-secret.yaml` to include our CloudFormation role that it will assume. The secret template in this workshop already knows what the role name is, so we only need to make sure the `AWS Account ID` is correct. We can configure the secret manifest by running the below command.
 
 ```bash
-curl http://169.254.169.254/latest/meta-data/iam/info/
+sed -ie "s/<account-id>/$(curl -s http://169.254.169.254/latest/meta-data/iam/info/ | grep -oP '\d*(?=\:instance-profile)')/g" aws-servicebroker-secret.yaml
 ```
 
 Now create a new secret in the `aws-service-broker` namespace
@@ -89,10 +91,33 @@ Now we need to restart the service broker pod in order for the changes to propog
 oc rollout latest aws-asb -n aws-service-broker
 ```
 
-It could take up to 5 minutes for the changes to be registered with the OpenShift Service Catalog.
+It could take up to 5 minutes for the changes to be registered with the OpenShift Service Catalog. It's important that you wait for this change to happen, or the service provisioning will fail. You can confirm that the update is completed in two ways. 
 
-## Provision a service
+1: Go back to the `OpenShift Console` and refresh the browser. If you see input fields for `aws_secret` or `aws_region` when provsioining the SQS Service. The refresh has not happened yet. 
+2: Run the below command.
+
+```bash
+oc logs -n aws-service-broker --tail 40 $(oc get pods -n aws-service-broker | grep -oE 'aws-asb-[0-9]-[aA0-zZ9]*')
+```
+
+You should expect to see a line similar to this:
+```
+[2018-06-25T20:57:31.942Z] [DEBUG] - Spec dh-sqs matched rule {dh-sqs aws-secret}
+```
+
+### Create a New Project throuth the Catalog 
 Now that we have the service catalog installed and ready to use on the cluster. Let's provision a new SQS queue in a brand new project using the OpenShift console.
+
+Make sure you are on the welcome page of the `OpenShift Console`. Look for the icon that reads `Amazon SQS` and click on the Icon. This will open a new walkthrough wizard.
+On the first page, click next. Select FIFO and click next again. 
+
+Under `Project Name` Type whatever name you want. For this lab, we called it i`my-sqs-project` with a `Project Display Name` of `My SQS Project`
+
+!Important - Make sure that you do not need to enter the AWS Service Credentials into any inputs. 
+
+Leave all other options as default and click Next.
+
+Select not to bind the service at this time. We will do it later.
 
 ### Navigate to the new project. 
 Make sure that you are in the new project in the OpenShift Console, by clicking on the project list names in the top left corner, and selecting the new project you created when provisioning the SQS queue.
@@ -120,7 +145,9 @@ Now that the application has been provisioned, we need to expose a route for it 
 Once this is done, you should see a new URl available above your pod. Click on this URL to open your app in a new browser tab. You can expect to see an error of missing credentials / parameters. 
 
 ### Create Binding. 
-Earlier we created the SQS Service. Navigate back to the service in the console and look for the `Create Binding` hyperlink. Click it and follow the pop-up wizard. Leave everything default. 
+Earlier we created the SQS Service. Navigate back to the `Overview` tab in the `OpenShift Console` for the project you created and look for the `Create Binding` hyperlink underneath the `Provisioned Services` section. Click it and follow the pop-up wizard. Leave everything default. 
+
+Click on the little arrow to the left of `Amazon SQS` to expand the service details.
 
 Now that the secret has been created, attach it to your application. Click on `view secret`, then on `add to application` in the top right. Select the application you launched earlier from the drop down. Leave the secrets as environment variables and click save. 
 
