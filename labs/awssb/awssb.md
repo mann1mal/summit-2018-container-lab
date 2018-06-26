@@ -112,7 +112,7 @@ On the first page, click next. Select FIFO and click next again.
 
 Under `Project Name` Type whatever name you want. For this lab, we called it i`my-sqs-project` with a `Project Display Name` of `My SQS Project`
 
-!Important - Make sure that you do not need to enter the AWS Service Credentials into any inputs. 
+**Important** - Make sure that you do not need to enter the AWS Service Credentials into any inputs. 
 
 Leave all other options as default and click Next.
 
