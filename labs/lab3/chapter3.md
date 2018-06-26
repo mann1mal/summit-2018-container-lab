@@ -111,7 +111,7 @@ Now we'll create the Wordpress Dockerfile. (As before, there is a reference file
         RUN chmod 755 /scripts/*
 ```
 
-* Add the Wordpress source from gzip tar file. podman will extract the files. Also, modify permissions to support non-root container runtime. Switch to port 8080 for non-root apache runtime.
+* Add the Wordpress source from gzip tar file. docker will extract the files. Also, modify permissions to support non-root container runtime. Switch to port 8080 for non-root apache runtime.
 
 ```bash
         COPY latest.tar.gz /latest.tar.gz
