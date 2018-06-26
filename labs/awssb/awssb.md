@@ -93,11 +93,19 @@ oc rollout latest aws-asb -n aws-service-broker
 
 It could take up to 5 minutes for the changes to be registered with the OpenShift Service Catalog. It's important that you wait for this change to happen, or the service provisioning will fail. We need to confirm this update has happened. 
 
-Run the below command.
+Find your pod ID:
 
 ```bash
-oc logs -n aws-service-broker --tail 40 $(oc get pods -n aws-service-broker | grep -oE 'aws-asb-[0-9]-[aA0-zZ9]*') | grep "Filtering secrets"
+$ oc get pods -n aws-service-broker
+NAME                   READY     STATUS    RESTARTS   AGE
+aws-asb-2-229nw        1/1       Running   0          7h
+aws-asb-etcd-1-4kchn   1/1       Running   0          7h
 ```
+Search the log file:
+```bash
+oc logs aws-asb-2-229nw | grep "Filtering secrets"
+```
+
 
 You should expect to see a line similar to this:
 ```
