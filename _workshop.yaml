@@ -1,0 +1,15 @@
+---
+id: openshift_rh_summit_2018
+name: Workshop
+workshop_title: "OpenShift on AWS"
+revision: openshift_rh_summit_2018
+logo: "aws-smile.png"
+vars:
+  WORKSHOP: 2018
+modules:
+  activate:
+  - "labs_lab0_chapter0"
+  - "labs_lab1_chapter1"
+  - "labs_lab3_chapter3"
+  - "labs_lab5_chapter5"
+  - "labs_awssb_awssb"

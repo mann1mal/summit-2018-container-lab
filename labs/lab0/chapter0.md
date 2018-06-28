@@ -1,4 +1,4 @@
-## Introduction
+# Introduction
 
 In this lab, we are going to leverage a process known as [`oc cluster up`](https://github.com/openshift/origin/blob/master/docs/cluster_up_down.md). `oc cluster up` leverages the local docker daemon and enables us to quickly stand up a local OpenShift Container Platform to start our evaluation. The key result of `oc cluster up` is a reliable, reproducible OpenShift environment to iterate on.
 
@@ -11,21 +11,33 @@ This lab is designed to accommodate many students. As a result, each student wil
 
 You will be assigned a number by the instructor.
 
-Retrieve the key from the [instructor host](http://s3-us-west-2.amazonaws.com/redhat-lunch-learn-lab/index.html) so that you can _SSH_ into the instances by accessing the password protected directory from the table above. Download the .PEM or .PPK file to your local machine and change the permissions of the file to 600.
+Retrieve the key from the Download links here
+- [SSH Private Key - PEM ](https://s3-us-west-2.amazonaws.com/redhat-lunch-learn-lab/keys/ocp-lab.pem)
+- [SSH Private Key - PPK ](https://s3-us-west-2.amazonaws.com/redhat-lunch-learn-lab/keys/ocp-lab.ppk)
+
+You can now _SSH_ into the instances by downloading the `.PEM` or `.PPK` file to your local machine and change the permissions of the file to `400` if you are using `Mac OSX` or `Linux`.
+
+```bash
+curl -kLO "https://s3-us-west-2.amazonaws.com/redhat-lunch-learn-lab/keys/ocp-lab.pem"
+chmod 400 ocp-lab.pem
+```
+
+If you are using `Windows` and `Putty`, download the PPK file and log in using `Putty`
+
+Important!: The Linux user to log in with is `ec2-user`
 
 ## Connecting to your AWS Instance
 This lab should be performed on **YOUR ASSIGNED AWS INSTANCE** as `ec2-user` unless otherwise instructed.
 
 **_NOTE_**: Please be respectful and only connect to your assigned instance. Every instance for this lab uses the same public key so you could accidentally (or with malicious intent) connect to the wrong system. If you have any issues please inform an instructor.
 ```bash
-$ ssh -i ocp-workshop.pem ec2-user@student-<number>.openshift.awsworkshop.io
+$ ssh -i ocp-lab.pem ec2-user@student-<number>.openshift.awsworkshop.io
 ```
 
-**NOTE**: For Windows users you will have to use a terminal like [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html) to SSH using the private key. 
+**NOTE**: For Windows users you will have to use a terminal like [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html) to SSH using the private key.
 
 Once installed, use the following instructions to SSH to your VM instance: [http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html).
 
-TIP: Use the rhte.ppk key located at:  [instructor host](https://instructor.labs.sysdeseng.com/rhte.ppk) as PuTTY uses a different format for its keys.
 
 ## Getting Set Up
 For the sake of time, some of the required setup has already been taken care of on your AWS VM. For future reference though, the easiest way to get started is to head over to the OpenShift Origin repo on github and follow the "[Getting Started](https://github.com/openshift/origin/blob/master/docs/cluster_up_down.md)" instructions. The instructions cover getting started on Windows, MacOS, and Linux.
@@ -85,13 +97,14 @@ We can also check out the OpenShift console. Open a browser and navigate to `htt
 ## Lab Materials
 
 Clone the lab repository from github:
+
 ```bash
 $ cd ~/
-$ git clone https://github.com/mann1mal/summit-2018-container-lab
+$ git clone https://github.com/mandusm/summit-2018-container-lab.git
 ```
 
 ## OpenShift Container Platform
 
 What is OpenShift? OpenShift, which you may remember as a "[PaaS](https://en.wikipedia.org/wiki/Platform_as_a_service)" to build applications on, has evolved into a complete container platform based on Kubernetes. If you remember the "[DIY Cartridges](https://github.com/openshift/origin-server/blob/master/documentation/oo_cartridge_guide.adoc#diy)" from older versions of Openshift, essentially, OpenShift v3 has expanded the functionality to provide complete containers. With OpenShift, you can build from a platform, build from scratch, or anything else you can do in a container, and still get the complete lifecycle automation you loved in the older versions.
 
-You are now ready to move on to the [next lab](../lab1/chapter1.md).
+You are now ready to move on to the next lab.

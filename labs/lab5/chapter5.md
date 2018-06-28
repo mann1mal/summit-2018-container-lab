@@ -1,4 +1,4 @@
-# LAB 5: OpenShift templates and web console
+# OpenShift templates and web console
 
 In this lab we introduce how to simplify your container deployments with OpenShift templates.  We will also explore the web console.
 
@@ -104,23 +104,23 @@ $ oc cluster status
 
 Login to the web console with the `developer` user.
 
-![image not loading](images/1.png "Login")
+![image not loading](/api/workshops/openshift_rh_summit_2018/content/assets/labs/lab5/images/1.png "Login")
 
 And after we’ve logged in, we see a list of projects that the developer user has access to. Let's select the `production` project:
-![image not loading](images/2.png "Projects")
+![image not loading](/api/workshops/openshift_rh_summit_2018/content/assets/labs/lab5/images/2.png "Projects")
 
 Our project landing page provides us with a high-level overview of our wordpress application's pods, services, and route:
-![image not loading](images/3.png "Overview")
+![image not loading](/api/workshops/openshift_rh_summit_2018/content/assets/labs/lab5/images/3.png "Overview")
 
 Let's dive a little deeper. We want to view a list of our pods by clicking on `Pods` in the left Applications menu:
-![image not loading](images/4.png "Pods")
+![image not loading](/api/workshops/openshift_rh_summit_2018/content/assets/labs/lab5/images/4.png "Pods")
 
 Next, let's click on one of our running pods for greater detail:
-![image not loading](images/5.png "Wordpress")
+![image not loading](/api/workshops/openshift_rh_summit_2018/content/assets/labs/lab5/images/5.png "Wordpress")
 
 With this view, we have access to pod information like status, logs, image, volumes, and more:
-![image not loading](images/6.png "PodDetails")
+![image not loading](/api/workshops/openshift_rh_summit_2018/content/assets/labs/lab5/images/6.png "PodDetails")
 
 Feel free to continue exploring the console.
 
-In the final [bonus lab](../lab6/chapter6.md) you'll get to play with some new features, the service catalog and broker.
+In the final lab you'll get to play with some new features, the service catalog and broker.
